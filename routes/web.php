@@ -3,7 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PiezaController;
 use App\Http\Controllers\FavoritoController;
+use App\Http\Controllers\ChatController;
 use Illuminate\Support\Facades\Route;
+
+
 
 Route::get('/', function () {
     return redirect()->route('piezas.index');
@@ -48,4 +51,11 @@ Route::get('/favoritos', [FavoritoController::class, 'index'])->middleware('auth
 Route::post('/checkout/process', [App\Http\Controllers\CheckoutController::class, 'process'])->name('checkout.process');
 Route::get('/checkout/success', [App\Http\Controllers\CheckoutController::class, 'success'])->name('checkout.success');
 Route::get('/checkout/cancel', [App\Http\Controllers\CheckoutController::class, 'cancel'])->name('checkout.cancel');
-Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+
+// Route::post('/stripe/webhook', [StripeWebhookController::class, 'handleWebhook']);
+
+Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
+Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show');
+Route::post('/chat/{user}', [ChatController::class, 'store'])->name('chat.store');
+
+require __DIR__ . '/auth.php';
