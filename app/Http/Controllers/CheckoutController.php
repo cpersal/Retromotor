@@ -10,6 +10,7 @@ use App\Models\Pieza;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\CompraExitosa;
+use App\Mail\VentaRealizada;
 
 class CheckoutController extends Controller
 {
@@ -45,24 +46,43 @@ class CheckoutController extends Controller
     }
 
 
-    public function success(Request $request)
-    {
-        Stripe::setApiKey(config('services.stripe.secret'));
-        $session = \Stripe\Checkout\Session::retrieve($request->session_id);
+public function success(Request $request)
+{
+    Stripe::setApiKey(config('services.stripe.secret'));
+    $session = \Stripe\Checkout\Session::retrieve($request->session_id);
 
-        $piezaId = $session->metadata->pieza_id;
-        $pieza = Pieza::findOrFail($piezaId);
-        $user = Auth::user();
-        //crear pdf
-        $pdf = Pdf::loadView('pdf.factura', [
-            'pieza' => $pieza,
-            'user' => $user
+    $piezaId = $session->metadata->pieza_id;
+    $pieza = Pieza::with('user')->findOrFail($piezaId); // Cargar la relación user
+    $user = Auth::user();
+    
+    // Crear PDF
+    $pdf = Pdf::loadView('pdf.factura', [
+        'pieza' => $pieza,
+        'user' => $user
+    ]);
+    
+    // Enviar correo al comprador
+    Mail::to($user->email)->send(new CompraExitosa($pieza, $pdf));
+    
+    if ($pieza->user) { 
+        \Log::info('Enviando correo a vendedor', [
+            'vendedor_email' => $pieza->user->email,
+            'vendedor_id' => $pieza->user->id
         ]);
-        //enviar pdf
-        Mail::to($user->email)->send(new CompraExitosa($pieza, $pdf));
-        $amount = $session->amount_total / 100;
-        return view('checkout.success', compact('amount'));
+        
+        try {
+            Mail::to($pieza->user->email)->send(new VentaRealizada($pieza, $user));
+            \Log::info('Correo a vendedor enviado con éxito');
+        } catch (\Exception $e) {
+            \Log::error('Error enviando correo a vendedor: ' . $e->getMessage());
+        }
+    } else {
+        \Log::warning('No se encontró vendedor para la pieza', ['pieza_id' => $pieza->id]);
     }
+    
+    $amount = $session->amount_total / 100;
+    return view('checkout.success', compact('amount'));
+}
 
 
     public function cancel(Request $request)
@@ -73,7 +93,6 @@ class CheckoutController extends Controller
             return redirect()->route('piezas.show', ['pieza' => $piezaId])
                 ->with('error', 'El pago fue cancelado.');
         }
-        //redireccionar a pagina principal si no se encuentra la pieza
         return redirect()->route('piezas.index')
             ->with('error', 'El pago fue cancelado.');
     }

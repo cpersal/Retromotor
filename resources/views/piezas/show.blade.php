@@ -212,7 +212,7 @@
                                 </div>
                             @else
                                 <div class="space-y-4">
-                                    <button
+                                    <a href="{{ route('chat.show', $pieza->user_id) }}"
                                         class="w-full flex items-center justify-center px-6 py-3 border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition duration-300">
                                         <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -220,7 +220,7 @@
                                             </path>
                                         </svg>
                                         Contactar al vendedor
-                                    </button>
+                                    </a>
                                     <form action="{{ route('checkout.process') }}" method="POST" class="w-full">
                                         @csrf
                                         <input type="hidden" name="pieza_id" value="{{ $pieza->id }}">

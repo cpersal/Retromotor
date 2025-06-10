@@ -23,7 +23,7 @@ class CompraExitosa extends Mailable
 
     public function build()
     {
-        return $this->markdown('emails.compra')
+        return $this->view('emails.compra')
             ->subject('¡Gracias por tu compra!')
             ->attachData($this->pdf->output(), 'factura.pdf');
     }

@@ -57,5 +57,5 @@ Route::get('/checkout/cancel', [App\Http\Controllers\CheckoutController::class, 
 Route::get('/chat', [ChatController::class, 'index'])->name('chat.index');
 Route::get('/chat/{user}', [ChatController::class, 'show'])->name('chat.show');
 Route::post('/chat/{user}', [ChatController::class, 'store'])->name('chat.store');
-
+Route::get('/chat/{user}/new-messages', [ChatController::class, 'getNewMessages'])->name('chat.new-messages');
 require __DIR__ . '/auth.php';
