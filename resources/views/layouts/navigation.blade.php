@@ -1,5 +1,4 @@
 <nav x-data="{ open: false }" class="bg-indigo-600 border-b border-indigo-700 text-white">
-
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
             <div class="flex items-center space-x-8">
@@ -9,26 +8,29 @@
 
                 <div class="hidden sm:flex space-x-8">
                     <x-nav-link :href="route('piezas.index')" :active="request()->routeIs('piezas.index')" :class="request()->routeIs('piezas.index')
-                        ? 'text-black font-bold'
+                        ? 'text-white font-bold border-b-2 border-white'
                         : 'text-white hover:text-yellow-200'">
                         {{ __('Piezas') }}
                     </x-nav-link>
+
                     <x-nav-link :href="route('piezas.create')" :active="request()->routeIs('piezas.create')" :class="request()->routeIs('piezas.create')
-                        ? 'text-black font-bold'
+                        ? 'text-white font-bold border-b-2 border-white'
                         : 'text-white hover:text-yellow-200'">
                         {{ __('Subir Artículo') }}
                     </x-nav-link>
+
                     @auth
                         <x-nav-link :href="route('dashboard')" :active="request()->routeIs('vendedor.show')" :class="request()->routeIs('vendedor.show')
-                            ? 'text-black font-bold'
+                            ? 'text-white font-bold border-b-2 border-white'
                             : 'text-white hover:text-yellow-200'">
                             {{ __('Perfil') }}
                         </x-nav-link>
                         <x-nav-link :href="route('favoritos.index')" :active="request()->routeIs('favoritos.index')" :class="request()->routeIs('favoritos.index')
-                            ? 'text-black font-bold'
-                            : 'text-red-600 hover:text-red-400'">
+                            ? 'text-white font-bold border-b-2 border-white'
+                            : 'text-white hover:text-yellow-200'">
                             <div class="flex items-center">
-                                <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 mr-1 text-red-800" fill="currentColor" stroke="none"
+                                    viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                                 </svg>
@@ -42,7 +44,7 @@
             <div class="hidden sm:flex sm:items-center space-x-4">
                 @auth
                     <x-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')" :class="request()->routeIs('chat.*')
-                        ? 'text-black font-bold'
+                        ? 'text-white font-bold border-b-2 border-white'
                         : 'text-white hover:text-yellow-200'">
                         <div class="flex items-center">
                             <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,29 +72,25 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('profile.edit')">
-                                {{ __('Profile') }}
-                            </x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
                                 <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault(); this.closest('form').submit();">
-                                    {{ __('Log Out') }}
+                                    {{ __('Cerrar sesión') }}
                                 </x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
                 @else
                     <x-nav-link class="text-white hover:text-yellow-200"
-                        :href="route('login')">{{ __('Login') }}</x-nav-link>
+                        :href="route('login')">{{ __('Iniciar sesión') }}</x-nav-link>
                     @if (Route::has('register'))
                         <x-nav-link class="text-white hover:text-yellow-200"
-                            :href="route('register')">{{ __('Register') }}</x-nav-link>
+                            :href="route('register')">{{ __('Registrarme') }}</x-nav-link>
                     @endif
                 @endauth
             </div>
 
-            <!-- Botón móvil -->
             <div class="sm:hidden flex items-center">
                 <button @click="open = ! open"
                     class="p-2 rounded-md text-white hover:text-yellow-200 hover:bg-pink-600 focus:outline-none transition">
@@ -107,34 +105,37 @@
             </div>
         </div>
 
-        <!-- Menú responsive -->
         <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
             <div class="pt-2 pb-3 space-y-1 text-white">
                 <x-responsive-nav-link :href="route('piezas.index')" :active="request()->routeIs('piezas.index')" :class="request()->routeIs('piezas.index')
-                    ? 'text-black font-bold'
+                    ? 'text-white font-bold border-b-2 border-white'
                     : 'text-white hover:text-yellow-200'">
                     {{ __('Piezas') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('piezas.create')" :active="request()->routeIs('piezas.create')" :class="request()->routeIs('piezas.create')
-                    ? 'text-black font-bold'
+                    ? 'text-white font-bold border-b-2 border-white'
                     : 'text-white hover:text-yellow-200'">
                     {{ __('Subir Artículo') }}
                 </x-responsive-nav-link>
                 @auth
                     <x-responsive-nav-link :href="route('chat.index')" :active="request()->routeIs('chat.*')" :class="request()->routeIs('chat.*')
-                        ? 'text-black font-bold'
+                        ? 'text-white font-bold border-b-2 border-white'
                         : 'text-white hover:text-yellow-200'">
                         {{ __('Chat') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('vendedor.show')" :class="request()->routeIs('vendedor.show')
-                        ? 'text-black font-bold'
+                        ? 'text-white font-bold border-b-2 border-white'
                         : 'text-white hover:text-yellow-200'">
                         {{ __('Perfil') }}
                     </x-responsive-nav-link>
-                    <x-responsive-nav-link :href="route('favoritos.index')" :active="request()->routeIs('favoritos.index')" :class="request()->routeIs('favoritos.index')
-                        ? 'text-black font-bold'
-                        : 'text-red-600 hover:text-red-400'">
-                        {{ __('Favoritos') }}
+                    <x-responsive-nav-link :href="route('favoritos.index')" :active="request()->routeIs('favoritos.index')" class="text-white hover:text-gray-200">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-1 text-red-800" fill="currentColor" stroke="none" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                            </svg>
+                            {{ __('Favoritos') }}
+                        </div>
                     </x-responsive-nav-link>
                 @endauth
             </div>
@@ -146,14 +147,11 @@
                         <div class="font-medium text-sm text-pink-100">{{ Auth::user()->email }}</div>
                     </div>
                     <div class="mt-3 space-y-1">
-                        <x-responsive-nav-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-responsive-nav-link>
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-responsive-nav-link :href="route('logout')"
                                 onclick="event.preventDefault(); this.closest('form').submit();">
-                                {{ __('Log Out') }}
+                                {{ __('Cerrar sesión') }}
                             </x-responsive-nav-link>
                         </form>
                     </div>
@@ -162,11 +160,11 @@
                 <div class="pt-4 pb-1 border-t border-pink-300">
                     <div class="mt-3 space-y-1">
                         <x-responsive-nav-link :href="route('login')">
-                            {{ __('Login') }}
+                            {{ __('Iniciar sesión') }}
                         </x-responsive-nav-link>
                         @if (Route::has('register'))
                             <x-responsive-nav-link :href="route('register')">
-                                {{ __('Register') }}
+                                {{ __('Registrarme') }}
                             </x-responsive-nav-link>
                         @endif
                     </div>

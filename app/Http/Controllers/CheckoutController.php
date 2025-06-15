@@ -27,7 +27,7 @@ class CheckoutController extends Controller
                     'currency' => 'eur',
                     'product_data' => [
                         'name' => $pieza->titulo,
-                        'images' => [$pieza->foto ? asset('storage/' . $pieza->foto) : asset('images/default-product.png')],
+                        'images' => [$pieza->foto ? asset('storage/piezas/miniaturas/' . $pieza->foto) : asset('images/default-product.png')],
                     ],
                     'unit_amount' => $pieza->precio * 100, //convertir de centimos a euros
                 ],
@@ -52,7 +52,7 @@ public function success(Request $request)
     $session = \Stripe\Checkout\Session::retrieve($request->session_id);
 
     $piezaId = $session->metadata->pieza_id;
-    $pieza = Pieza::with('user')->findOrFail($piezaId); // Cargar la relación user
+    $pieza = Pieza::with('user')->findOrFail($piezaId); 
     $user = Auth::user();
     
     // Crear PDF
